@@ -5,7 +5,6 @@ import java.util.*;
 
 public class Main {
 
-    // Class to represent each login entry from the CSV
     static class LoginEntry {
         LocalDateTime timestamp;
         String username;
@@ -20,24 +19,23 @@ public class Main {
     }
 
     public static void main(String[] args) {
-        // Default values
+        // Step 4: Default values
         String inputFile = "data/sample_log.csv";
         int threshold = 3;
         String outputFile = "data/suspicious_users.csv";
 
-        // Override defaults if CLI arguments are provided
+        // Override with CLI arguments
         if (args.length >= 1) inputFile = args[0];
         if (args.length >= 2) threshold = Integer.parseInt(args[1]);
         if (args.length >= 3) outputFile = args[2];
 
         List<LoginEntry> logins = new ArrayList<>();
 
-        // Read CSV file
         try (BufferedReader br = new BufferedReader(new FileReader(inputFile))) {
             String line = br.readLine(); // skip header
             while ((line = br.readLine()) != null) {
                 String[] parts = line.split(",");
-                if (parts.length < 3) continue; // skip malformed lines
+                if (parts.length < 3) continue; // skip malformed
                 logins.add(new LoginEntry(parts[0], parts[1], parts[2]));
             }
         } catch (Exception e) {
@@ -45,7 +43,7 @@ public class Main {
             return;
         }
 
-        // Count failed logins per user
+        // Count failed logins
         Map<String, Integer> failedCounts = new HashMap<>();
         for (LoginEntry entry : logins) {
             if (entry.status.equalsIgnoreCase("failure")) {
@@ -53,7 +51,7 @@ public class Main {
             }
         }
 
-        // Identify suspicious users
+        // Detect suspicious users
         List<String> suspiciousUsers = new ArrayList<>();
         for (String user : failedCounts.keySet()) {
             if (failedCounts.get(user) >= threshold) suspiciousUsers.add(user);
@@ -65,7 +63,7 @@ public class Main {
             System.out.println("User: " + user + ", Failed Attempts: " + failedCounts.get(user));
         }
 
-        // Save suspicious users to CSV
+        // Step 4: Save to CSV
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(outputFile))) {
             bw.write("username,failed_attempts\n");
             for (String user : suspiciousUsers) {
