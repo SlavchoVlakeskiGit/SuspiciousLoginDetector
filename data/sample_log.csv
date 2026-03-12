@@ -1,0 +1,6 @@
+timestamp,username,status
+2026-03-10 08:01,user1,success
+2026-03-10 08:05,user2,failure
+2026-03-10 08:06,user2,failure
+2026-03-10 08:07,user2,failure
+2026-03-10 08:10,user3,success
